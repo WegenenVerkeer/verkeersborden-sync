@@ -18,9 +18,12 @@ Let op dat uw applicatie overweg kan met de Let's encrypt certificaten (zie http
 
 Al de communicatie gebruikt REST calls met JSON data wanneer toepasselijk.
 
-Via deze URL kan u checken of de connectie en permissies werken:
+Via deze request kan u checken of de connectie en permissies werken:
 
-https://services.apps-dev.mow.vlaanderen.be/verkeersborden/rest/gebruikerbeperkingen?laag=VerkeersbordOpstelling
+```HTTP
+GET https://services.apps-dev.mow.vlaanderen.be/verkeersborden/rest/gebruikerbeperkingen?laag=VerkeersbordOpstelling
+Accept: application/vnd.awv.wdb-v3.0+json
+```
 
 Dit moet een toelating voor uw organisatie teruggeven.
 
@@ -34,17 +37,21 @@ Importeren is een asynchrone operatie, daarom is er een transactie sleutel nodig
 
 #### Transactie-sleutel opvragen:
 
+```HTTP
 POST /rest/verkeersborden/opstelling/transactie 
 Accept: application/vnd.awv.wdb-v3.0+json
+```
 
 Dit geeft een sleutel (string) terug die in de volgende call gebruikt kan worden. Deze sleutel kan maar 1 keer gebruikt worden om een file op te laden. U moet iedere keer een nieuwe sleutel opvragen.
 
 #### Opladen zip-file:
 
+```HTTP
 POST /rest/verkeersborden/opstelling/upload/{sleutel}
-Content: multipart/form-data
+Content-Type: multipart/form-data
+```
 
-zip-file zit in field met naam zipFile
+zip-file zit in field met naam ``zipFile``
 
 Formaat van zip-file: export.xml en svg files. Zie [Export-awv.xsd](Export-awv.xsd) voor schema van export.xml (met uitleg). 
 
@@ -54,12 +61,14 @@ Dit doet een upload van de data en start een import in de achtergrond.
 
 #### Opvragen status van import:
 
-```
+```HTTP
 GET /rest/audit/transactions/{sleutel}
 Accept: application/vnd.awv.wdb-v3.0+json
 ```
 
 Geeft JSON terug
+
+```JSON
 {
     transactionResult: ''
     errorTrace: ''
@@ -70,6 +79,7 @@ Geeft JSON terug
     transactionName: ''
     transactionStatus: 'SUCCESS' | 'EXECUTING' | 'FAILED'
 }
+```
 
 Omdat het opladen een asynchrone operatie is, kan het zijn dat deze call onmiddelijk na het starten van het opladen van de file een 404 teruggeeft. Probeer dan later opnieuw.
 
