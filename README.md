@@ -70,14 +70,14 @@ Geeft JSON terug
 
 ```JSON
 {
-    transactionResult: ''
-    errorTrace: ''
-    creationDate: ''
-    ldapId: ''
-    transactionId: ''
-    transactionType: ''
-    transactionName: ''
-    transactionStatus: 'SUCCESS' | 'EXECUTING' | 'FAILED'
+    "transactionResult": "",
+    "errorTrace": "",
+    "creationDate": "",
+    "ldapId": "",
+    "transactionId": "",
+    "transactionType": "",
+    "transactionName": "",
+    "transactionStatus": "SUCCESS | EXECUTING | FAILED"
 }
 ```
 
