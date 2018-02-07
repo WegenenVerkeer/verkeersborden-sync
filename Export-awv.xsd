@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://vkb.wegenenverkeer.be" targetNamespace="http://vkb.wegenenverkeer.be"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema" version="0.1" elementFormDefault="qualified"
+           attributeFormDefault="unqualified">
+    <!--
+      Een import/export bestaat uit een .zip file met daarin exact 1 XML file met naam "export.xml", volgens dit schema.
+      Verder kunnen er nog een aantal .svg files en .jpg files inzitten.
+    -->
+    <xs:element name="dataset">
+        <xs:complexType>
+            <xs:sequence>
+                <!-- Unieke ID van de dataset. Een UUID, optioneel tussen accolades. -->
+                <xs:element name="uid" type="xs:string"/>
+                <!-- Human-readable omschrijving. Wordt door VKB genegeerd. -->
+                <xs:element name="omschrijving" type="xs:string"/>
+
+                <!-- In VKB heeft een opstelling altijd 1 of meerdere aanzichten.
+                        In deze XML exporteren/importeren we eigenlijk de aanzichten en linken we die met elkaar via de uid en dfuid tags.
+                        Hier komt opstelling dus eigenlijk overeen met een aanzicht in VKB.
+                        Indien een opstelling meerdere aanzichten heeft, moet ervoor gezorgd worden dat de attributen die aan de opstelling hangen (voornamelijk locatie data),
+                        dus hetzelfde zijn voor de verschillende gelinkte opstelling-tags in de XML.
+                -->
+                <xs:element name="opstelling" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <!-- Unieke ID van het aanzicht. Een UUID, optioneel tussen accolades. -->
+                            <xs:element name="uid" type="xs:string"/>
+
+                            <!-- Vrije hoogte van het onderste bord. -->
+                            <xs:element name="vrijehoogte" type="xs:double"/>
+
+                            <!-- Type ophanging gebruikt in de opstelling. Volgende waardes worden ondersteund door VKB, met de VKB waarde waarop ze gemapt worden:
+                                    "Afsluiting" -> "Andere"
+                                    "Baken" -> "Andere"
+                                    "Bareel" -> "Andere"
+                                    "Galg IV" -> "Galgsteun"
+                                    "Galg" -> "Galgsteun"
+                                    "Muurarmatuur" -> "Tegen muur met armatuur"
+                                    "Portiek" -> "Portiek"
+                                    "Speciale steun" -> "Andere"
+                                    "Steun IV" -> "Steun inwendige verlichting"
+                                    "Steun" -> "Steun"
+                                    "Tegen muur" -> "Tegen muur zonder armatuur"
+                                    "Verkeerslicht" -> "Paal verkeerslicht"
+                                    "Verlichtingspaal" -> "Verlichtingspaal"
+                            -->
+                            <xs:element name="ophanging" type="xs:string" minOccurs="0"/>
+
+                            <!-- Coordinaat van het inplantingspunt van de opstelling in Lambert-72. -->
+                            <xs:element name="coordinaat">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="x" type="xs:double"/>
+                                        <xs:element name="y" type="xs:double"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+
+                            <!-- Datum van de inventarisatie. -->
+                            <xs:element name="opmeting" type="xs:date" minOccurs="0"/>
+
+                            <!-- De hoek van het aanzicht in radialen. Gaat tegenwijzersin, 0 punt is aanzicht voor wie van zuid naar noord gaat.-->
+                            <xs:element name="hoek" type="xs:double" minOccurs="0"/>
+
+                            <xs:element name="gemeente">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="straat" type="xs:string" minOccurs="0"/>
+                                        <xs:element name="huisnr" type="xs:string" minOccurs="0"/>
+                                        <xs:element name="gemeente" type="xs:string" minOccurs="0"/>
+
+                                        <!-- Inplantingspunt/zijde van de rijweg. Volgende waardes worden ondersteund door VKB, met de VKB waarde waarop ze gemapt worden:
+                                                "L" -> LINKS
+                                                "R" -> RECHTS
+                                                "M" -> MIDDEN
+                                                "B" -> BOVEN
+                                         -->
+                                        <xs:element name="inplanting" type="xs:string" minOccurs="0"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="vo">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="ident8" type="xs:string" minOccurs="0"/>
+
+                                        <!-- Inplantingspunt/zijde van de rijweg. Volgende waardes worden ondersteund door VKB, met de VKB waarde waarop ze gemapt worden:
+                                                "L" -> LINKS
+                                                "R" -> RECHTS
+                                                "M" -> MIDDEN
+                                                "B" -> BOVEN
+                                         -->
+                                        <xs:element name="inplanting" type="xs:string" minOccurs="0"/>
+
+                                        <!-- Indien de zijstraat opgegeven is, staat het bord niet langs een gewestweg, maar langs een zijstraat van de gewestweg.
+                                                De afstandGewestweg moet dan ook opgegeven worden.
+                                        -->
+                                        <xs:element name="zijstraat" type="xs:string" minOccurs="0"/>
+                                        <xs:element name="gemeente" type="xs:string" minOccurs="0"/>
+
+                                        <!-- De afgeleide positie op de ident8 in km. -->
+                                        <xs:element name="kilometerpunt" type="xs:double" minOccurs="0"/>
+
+                                        <!-- Het opschrift van het referentiepunt. In km. -->
+                                        <xs:element name="hectometer" type="xs:double" minOccurs="0"/>
+
+                                        <!-- Afstand in meter dat het bord van de gewestweg staat. Zie "zijstraat" tag. -->
+                                        <xs:element name="afstandGewestweg" type="xs:double" minOccurs="0"/>
+
+                                        <!-- De afstand tot het referentiepunt in meter. -->
+                                        <xs:element name="verplaatsing" type="xs:double" minOccurs="0"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="bord" minOccurs="0" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <!-- Unieke ID van het bord. Een UUID, optioneel tussen accolades. -->
+                                        <xs:element name="uid" type="xs:string"/>
+
+                                        <!-- Bord-code van het bord. -->
+                                        <xs:element name="type">
+                                            <xs:simpleType>
+                                                <xs:restriction base="xs:string">
+                                                    <xs:maxLength value="30"/>
+                                                </xs:restriction>
+                                            </xs:simpleType>
+                                        </xs:element>
+
+                                        <!-- Vorm van het bord.
+                                                "ro" -> rond
+                                                "rt" -> ruit
+                                                "rh" -> rechthoek
+                                                "dh" -> driehoek
+                                                "odh" -> omgekeerde driehoek
+                                                "ah" -> achthoek
+                                                "zh" -> zeshoek
+                                                "wwr" -> wegwijzer rechts
+                                                "wwl" -> wegwijzer links
+                                         -->
+                                        <xs:element name="vorm">
+                                            <xs:simpleType>
+                                                <xs:restriction base="xs:string">
+                                                    <xs:maxLength value="5"/>
+                                                </xs:restriction>
+                                            </xs:simpleType>
+                                        </xs:element>
+
+                                        <!-- Eerste afmeting in mm. Meestal de breedte van het bord. Dit is de logische afmeting zoals door de gebruiker ingegeven.
+                                                Vooral voor driehoek en omgekeerde driehoek heeft dit belang. Bv. Voor een A1a (dh) zijn dit de waardes:
+
+                                                <afmeting1>700.0</afmeting1>
+                                                <afmeting2>0.0</afmeting2>
+                                                <omschrevenRechthoek>
+                                                  <breedte>634.0</breedte>
+                                                  <hoogte>561.0</hoogte>
+                                                </omschrevenRechthoek>
+
+                                        -->
+                                        <xs:element name="afmeting1" type="xs:double"/>
+                                        <!-- Tweede afmeting in mm, kan 0 zijn, bv voor ronde of driehoekige borden. -->
+                                        <xs:element name="afmeting2" type="xs:double"/>
+
+                                        <!-- De opschriften van het bord, gescheiden door een "|" teken. Bv. voor een C21 is dit het tonnage, voor een C43 is dit de snelheidsbeperking. -->
+                                        <xs:element name="tekensymbolen" type="xs:string" minOccurs="0"/>
+
+                                        <!-- Opmerking die aan het bord hangt. -->
+                                        <xs:element name="opmerking" minOccurs="0">
+                                            <xs:simpleType>
+                                                <xs:restriction base="xs:string">
+                                                    <xs:maxLength value="200"/>
+                                                </xs:restriction>
+                                            </xs:simpleType>
+                                        </xs:element>
+
+                                        <!-- Het folietype van het bord. Volgende waardes worden ondersteund door VKB, met de VKB waarde waarop ze gemapt worden:
+                                                "Type I" -> "1"
+                                                "Type II" -> "2"
+                                                "Type III" -> "3"
+                                                "Type III.1" -> "3.a"
+                                                "Type III.2" -> "3.b"
+                                        -->
+                                        <xs:element name="beeldvlak" type="xs:string" minOccurs="0"/>
+                                        <xs:element name="fabricage" minOccurs="0">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <!-- Het fabricagetype van het bord. Volgende waardes worden ondersteund door VKB, met de VKB waarde waarop ze gemapt worden:
+                                                            "SB250" -> "Standaardbestek 250"
+                                                            "T2000" -> "T2000"
+                                                            "B&W" -> "Bruggen en wegen"
+                                                            "Vlak" -> "Vlak"
+                                                            "VMS" -> "Variable Message Sign"
+                                                            "IV" -> "Inwendig verlicht"
+                                                    -->
+                                                    <xs:element name="type" type="xs:string" minOccurs="0"/>
+                                                    <!-- Naam van de fabrikant -->
+                                                    <xs:element name="fabricant" type="xs:string" minOccurs="0"/>
+                                                    <xs:element name="fabricageDatum" type="xs:date" minOccurs="0"/>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <xs:element name="omschrevenRechthoek">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="breedte" type="xs:double"/>
+                                                    <xs:element name="hoogte" type="xs:double"/>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+
+                                        <!-- Beugels van het bord. Wordt momenteel niet geexporteerd vanuit VKB, enkel geimporteerd voor de AWV borden.  -->
+                                        <xs:element name="bevestiging" minOccurs="0" maxOccurs="unbounded">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="uid" type="xs:string"/>
+
+                                                    <!-- Iets van de vorm "dia 2.5", waarbij 2.5 de diameter van de beugel is. -->
+                                                    <xs:element name="omschrijving" type="xs:string"/>
+                                                    <!-- De positie van de beugel t.o.v. het bord. -->
+                                                    <xs:element name="referentiepunt">
+                                                        <xs:complexType>
+                                                            <xs:sequence>
+                                                                <xs:element name="x" type="xs:double"/>
+                                                                <xs:element name="y" type="xs:double"/>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                    <xs:element name="fabricagetype" type="xs:string"/>
+
+                                                    <!-- Hier kan een externe app extra data invullen over de beugels. -->
+                                                    <xs:element name="afbeelding" type="xs:string"/>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <!-- De categorie van het bord. Wordt in VKB niks mee gedaan, enkel bijgehouden en terug geexporteerd. -->
+                                        <xs:element name="categorie" type="xs:integer"/>
+
+                                        <!-- Positie van de linker-beneden hoek van de omschreven rechthoek van het bord, binnen de omschreven rechthoek van de platgeslagen voorstelling van het aanzicht. -->
+                                        <xs:element name="voorstelling">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="x" type="xs:double"/>
+                                                    <xs:element name="y" type="xs:double"/>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <!-- Positie van de linker-beneden hoek van de omschreven rechthoek van het bord, binnen de opstelling.
+                                                 Het nulpunt van de opstelling, is het middenpunt van de opstelling op het grondniveau.
+                                        -->
+                                        <xs:element name="opstelling">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="x" type="xs:double"/>
+                                                    <xs:element name="y" type="xs:double"/>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+
+                                        <!-- Afbeelding van het bord. De inhoud van de tag kan door een externe applicatie vrij ingevuld worden. Bij export van dit bord, komt deze data terug mee. -->
+                                        <xs:element name="afbeelding">
+                                            <xs:complexType>
+                                                <xs:simpleContent>
+                                                    <xs:extension base="xs:string">
+                                                        <!-- Relatief pad van de svg van het bord binnen de zip-file. -->
+                                                        <xs:attribute name="href" type="xs:string"/>
+                                                        <!-- Wordt door VKB op true gezet indien het bord door de VKB opstelling bouwer toegevoegd is. -->
+                                                        <xs:attribute name="wdbBord" type="xs:boolean"/>
+                                                    </xs:extension>
+                                                </xs:simpleContent>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="steun" minOccurs="0" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <!-- Unieke ID van de steun. Een UUID, optioneel tussen accolades. -->
+                                        <xs:element name="uid" type="xs:string"/>
+                                        <xs:element name="fabricagetype" type="xs:string"/>
+                                        <!-- De kleur van de steun. Volgende waardes worden ondersteund door VKB, met de VKB waarde waarop ze gemapt worden:
+                                                  "Grijs RAL7043" -> "Grijs (Standaardbestek 250)"
+                                                  "Oranje RAL2009" -> "Oranje (Standaardbestek 250)"
+                                                  "Groen RAL6024" -> "Groen (Bestek Bruggen en Wegen)"
+                                                  "Blanco" -> "Niet gespecifieerd"
+                                        -->
+                                        <xs:element name="kleur" type="xs:string"/>
+
+                                        <!-- De totale lengte van de steun in mm. -->
+                                        <xs:element name="lengte" type="xs:double"/>
+                                        <xs:element name="voetstuk" minOccurs="0">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="omschrijving" type="xs:string"/>
+                                                    <xs:element name="breedte" type="xs:double"/>
+                                                    <xs:element name="diepte" type="xs:double"/>
+                                                    <xs:element name="hoogte" type="xs:double"/>
+                                                    <xs:element name="fabricagetype" type="xs:string"/>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <!-- Het bodemtype. Volgende waardes worden ondersteund door VKB, met de VKB waarde waarop ze gemapt worden:
+                                                   "Betontegel" -> "Betontegel"
+                                                   "Losse grond" -> "Losse grond"
+                                                   "Verhard oppervlak (asfalt-beton)" -> "Verhard oppervlak"
+                                        -->
+                                        <xs:element name="bodemType" type="xs:string" minOccurs="0"/>
+                                        <xs:element name="lengteBovenGrond" type="xs:double"/>
+                                        <xs:element name="lengteOnderGrond" type="xs:double"/>
+                                        <!-- Positie van de steun binnen de opstelling. Het nulpunt van de opstelling, is het middenpunt van de opstelling op het grondniveau.-->
+                                        <xs:element name="coordinaat">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="x" type="xs:double"/>
+                                                    <xs:element name="y" type="xs:double"/>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <!-- Indien het een ronde steun is, meer info over de afmeting en dikte. -->
+                                        <xs:element name="cirkel" minOccurs="0">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="diameter" type="xs:double"/>
+                                                    <xs:element name="wanddikte" type="xs:double"/>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <!-- Indien het een rechthoekige steun is, meer info over de afmeting en dikte. -->
+                                        <xs:element name="rechthoek" minOccurs="0">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="breedte" type="xs:double"/>
+                                                    <xs:element name="lengte" type="xs:double"/>
+                                                    <xs:element name="wanddikte" type="xs:double"/>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <!-- Ontwerp xml van de opstelling. Wordt door SVG niet meer gebruikt. -->
+                            <xs:element name="ontwerptekening" minOccurs="0">
+                                <xs:complexType>
+                                    <!-- Relatief pad van de xml van het ontwerp van de opstelling binnen de zip-file. -->
+                                    <xs:attribute name="href" type="xs:string"/>
+                                </xs:complexType>
+                            </xs:element>
+
+                            <xs:element name="afbeelding" minOccurs="0">
+                                <xs:complexType>
+                                    <!-- Relatief pad van de svg van de opstelling binnen de zip-file. -->
+                                    <xs:attribute name="href" type="xs:string"/>
+                                </xs:complexType>
+                            </xs:element>
+
+                            <!-- Foto's van het aanzicht. In jpeg formaat. -->
+                            <xs:element name="foto" minOccurs="0" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="breedte" type="xs:double"/>
+                                        <xs:element name="hoogte" type="xs:double"/>
+                                    </xs:sequence>
+                                    <!-- Relatief pad van de foto binnen de zip-file. -->
+                                    <xs:attribute name="href" type="xs:string"/>
+                                </xs:complexType>
+                            </xs:element>
+
+                            <!-- Voor het eerste aanzicht van de opstelling, heeft dit dezelfde waarde als uid van de opstelling.
+                                    Voor de volgende aanzichten, heeft dit de waarde van de uid van het eerste aanzicht van de opstelling.
+                            -->
+                            <xs:element name="dfuid" type="xs:string"/>
+                            <!-- De categorie van het aanzicht. Wordt in VKB niks mee gedaan, enkel bijgehouden en terug geexporteerd. -->
+                            <xs:element name="categorie" type="xs:integer"/>
+
+                            <!-- Wordt bij import niet gebruikt, VKB zet hier bij export een id van het aanzicht. -->
+                            <xs:element name="referentie" type="xs:string" minOccurs="0"/>
+
+                            <!-- VKB zet hier bij export de naam van de beheerder van de opstelling. -->
+                            <xs:element name="beheerder" type="xs:string" minOccurs="0"/>
+                            <!-- VKB zet hier bij export altijd 0.01 -->
+                            <xs:element name="schaalopst" type="xs:double"/>
+                            <!-- VKB zet hier bij export altijd 0.01 -->
+                            <xs:element name="schaalref" type="xs:double"/>
+
+                            <!-- Het coordinaat in Lambert72 van het ankerpunt. -->
+                            <xs:element name="reflijn">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="x" type="xs:double"/>
+                                        <xs:element name="y" type="xs:double"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+
+                            <!-- Wordt bij import gebruikt om te zien of het om een geplande verwijdering gaat. -->
+                            <xs:element name="teverwijderen" type="xs:boolean"/>
+
+                            <!-- Historiek van het element. Wordt op deze moment nog niet gebruikt bij export van VKB. -->
+                            <xs:element name="historiek" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <!-- Toestand van deze opstelling:
+                                          "G" -> geplande toestand
+                                          "B" -> bestaande toestand
+                                          "V" -> verleden toestand
+                                        -->
+                                        <xs:element name="waarde" type="xs:string"/>
+
+                                        <!-- uid van de vorige versie van de opstelling waar dit naar verwijst. Indien geen historiek, verwijst het naar zichzelf. -->
+                                        <xs:element name="refuid" type="xs:string"/>
+                                        <xs:element name="datumhist1" type="xs:dateTime" minOccurs="0"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
