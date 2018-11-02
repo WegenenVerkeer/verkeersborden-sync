@@ -3,7 +3,7 @@ Documentatie en schema file om een sync vanuit een externe applicatie (EXT) met 
 
 ## EXT is master
 De sync van EXT naar VKB, waarbij EXT de eigenaar van de data is, is op dit moment een PUSH vanuit de externe applicatie naar VKB.
-Hierbij worden de opstellingen die in VKB bestaan overschreven met deze in de import. 
+Hierbij worden de opstellingen die in VKB bestaan overschreven met deze in de import.
 
 ### Setup
 Voor er gestart kan worden met het testen, met er langs de kant van VKB wel wat setup gebeuren.
@@ -38,7 +38,7 @@ Importeren is een asynchrone operatie, daarom is er een transactie sleutel nodig
 #### Transactie-sleutel opvragen:
 
 ```HTTP
-POST /rest/verkeersborden/opstelling/transactie 
+POST /rest/verkeersborden/opstelling/transactie
 Accept: application/vnd.awv.wdb-v3.0+json
 ```
 
@@ -53,7 +53,7 @@ Content-Type: multipart/form-data
 
 zip-file zit in field met naam ``zipFile``
 
-Formaat van zip-file: export.xml en svg files. Zie [Export-awv.xsd](Export-awv.xsd) voor schema van export.xml (met uitleg). 
+Formaat van zip-file: export.xml en svg files. Zie [Export-awv.xsd](Export-awv.xsd) voor schema van export.xml (met uitleg).
 
 [Dit](verkeersborden.zip) is een voorbeeld van een zip-file.
 
@@ -77,11 +77,20 @@ Geeft JSON terug
     "transactionId": "",
     "transactionType": "",
     "transactionName": "",
-    "transactionStatus": "SUCCESS | EXECUTING | FAILED"
+    "transactionStatus": "SUCCESS | EXECUTING | FAILED",
+    "details": [
+      {
+        "identifier": "",
+        "status": "WAITING | SUCCESS | INPROGRESS | FAIL | SKIPPED",
+        "error": "",
+        "warning": ""
+      }
+    ]
 }
 ```
 
+Details is een array van de opstellingen in de XML file. Identifier is dan de uid uit de XML file.
+Error en warning zijn optioneel en geven de reden van de fout of waarschuwing weer.
+Status gaat van WAITING naar SKIPPED of INPROGRESS en dan naar SUCCESS of FAIL.
+
 Omdat het opladen een asynchrone operatie is, kan het zijn dat deze call onmiddelijk na het starten van het opladen van de file een 404 teruggeeft. Probeer dan later opnieuw.
-
-
-
