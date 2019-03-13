@@ -93,4 +93,12 @@ Details is een array van de opstellingen in de XML file. Identifier is dan de ui
 Error en warning zijn optioneel en geven de reden van de fout of waarschuwing weer.
 Status gaat van WAITING naar SKIPPED of INPROGRESS en dan naar SUCCESS of FAIL.
 
-Omdat het opladen een asynchrone operatie is, kan het zijn dat deze call onmiddelijk na het starten van het opladen van de file een 404 teruggeeft. Probeer dan later opnieuw.
+Omdat het opladen een asynchrone operatie is, kan het zijn dat deze call na het starten van het opladen van de file een 404 http-status teruggeeft. Probeer dan later opnieuw. Als de service grote load heeft, kan dit potentieel lang duren.
+
+Buiten de 404 http-status krijg je ook nog een json terug met deze vorm:
+
+```JSON
+{
+    "error": "Er bestaat geen transactie met transactie ID xxxxxxxxxx"
+}
+```
