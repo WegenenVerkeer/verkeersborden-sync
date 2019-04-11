@@ -8,13 +8,15 @@ Hierbij worden de opstellingen die in VKB bestaan overschreven met deze in de im
 ### Setup
 Voor er gestart kan worden met het testen, met er langs de kant van VKB wel wat setup gebeuren.
 
-Stuur daarvoor de naam van de organisatie (gemeente/provincie/...) door via email. Deze zal dan in VKB gemarkeerd worden als een extern beheerde organisatie, waardoor er in VKB geen wijzigingen op de opstellingen van deze organisatie kunnen gebeuren, wat ons toelaat om een enkel richting sync te gebruiken.
+Stuur daarvoor de naam van de organisatie (gemeente/provincie/...) en applicatie door via email. Deze zal dan in VKB gemarkeerd worden als een extern beheerde organisatie, waardoor er in VKB geen wijzigingen op de opstellingen van deze organisatie kunnen gebeuren, wat ons toelaat om een enkel richting sync te gebruiken.
 
-Als antwoord sturen we u een client-certificaat dat u moet gebruiken bij de communicatie tussen EXT en VKB.
+1. AWV Team Verkeersborden.Vlaanderen definieert een CommonName (CN),
+    het voorstel is: *applicatie*&lowbar;vkb&lowbar;*organisatie*&lowbar;dev&lowbar;client.mow.vlaanderen.be )
+2. De organisatie genereert hiermee een CSR en een private key
+3. De organisatie bezorgt ons die CSR
+4. Wij genereren de public key en bezorgen die terug
 
-Per organisatie krijgt u 1 certificaat, dus indien uw applicatie meerdere organisaties beheert, moet u de sync zelf opsplitsen en het juiste certificaat gebruiken.
-
-Let op dat uw applicatie overweg kan met de Let's encrypt certificaten (zie https://letsencrypt.org/docs/certificate-compatibility/).
+Per organisatie hebben we 1 certificaat nodig, dus indien uw applicatie meerdere organisaties beheert, moet u de sync zelf opsplitsen en het juiste certificaat gebruiken.
 
 Al de communicatie gebruikt REST calls met JSON data wanneer toepasselijk.
 
