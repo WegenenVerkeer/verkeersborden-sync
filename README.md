@@ -10,6 +10,8 @@ Voor er gestart kan worden met het testen, met er langs de kant van VKB wel wat 
 
 Stuur daarvoor de naam van de organisatie (gemeente/provincie/...) en applicatie door via email. Deze zal dan in VKB gemarkeerd worden als een extern beheerde organisatie, waardoor er in VKB geen wijzigingen op de opstellingen van deze organisatie kunnen gebeuren, wat ons toelaat om een enkel richting sync te gebruiken.
 
+Dan moet er een certificaat aangemaakt en geregistreerd worden. De procedure daarvoor is als volgt:
+
 1. AWV Team Verkeersborden.Vlaanderen definieert een CommonName (CN),
     het voorstel is: *applicatie*&lowbar;vkb&lowbar;*organisatie*&lowbar;dev&lowbar;client.mow.vlaanderen.be )
 2. De organisatie genereert hiermee een CSR en een private key
