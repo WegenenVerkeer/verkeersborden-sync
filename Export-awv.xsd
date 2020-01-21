@@ -56,8 +56,10 @@
                                 </xs:complexType>
                             </xs:element>
 
-                            <!-- Datum van de inventarisatie. -->
+                            <!-- Datum van de inventarisatie. Indien niet opgegeven, wordt de historiekdatum gebruikt. -->
                             <xs:element name="opmeting" type="xs:date" minOccurs="0"/>
+                            <!-- Plaatsingsdatum van de opstelling. Indien niet opgegeven, wordt de opmeting datum gebruikt. Indien die ook niet is opgegeven, wordt de historiekdatum gebruikt. Indien die ook niet is opgegeven, wordt 01.01.1950 gebruikt. -->
+                            <xs:element name="plaatsingsDatum" type="xs:date" minOccurs="0"/>
 
                             <!-- De hoek van het aanzicht in radialen. Gaat tegenwijzersin, 0 punt is aanzicht voor wie van zuid naar noord gaat.-->
                             <xs:element name="hoek" type="xs:double" minOccurs="0"/>
