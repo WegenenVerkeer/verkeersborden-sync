@@ -57,7 +57,9 @@ Content-Type: multipart/form-data
 
 zip-file zit in field met naam ``zipFile``
 
-Formaat van zip-file: export.xml en svg files. Zie [Export-awv.xsd](Export-awv.xsd) voor schema van export.xml (met uitleg).
+Formaat van zip-file: export.xml en svg files. Zie [Export-awv.xsd](Export-awv.xsd) voor schema van export.xml (met uitleg) en [Coordinaten.md](Coordinaten.md) voor meer uitleg over het coordinaten systeem van de voorstelling en opstelling.
+
+Opstellingen kunnen simpel verwijderd worden door ``teverwijderen`` op ``true`` te zetten.
 
 [Dit](verkeersborden.zip) is een voorbeeld van een zip-file.
 
