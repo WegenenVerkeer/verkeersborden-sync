@@ -394,10 +394,10 @@
                                 </xs:complexType>
                             </xs:element>
 
-                            <!-- Wordt bij import gebruikt om te zien of het om een geplande verwijdering gaat. -->
+                            <!-- Wordt bij import gebruikt om te zien of het om een (geplande) verwijdering gaat. -->
                             <xs:element name="teverwijderen" type="xs:boolean"/>
 
-                            <!-- Historiek van het element. Wordt op deze moment nog niet gebruikt bij export van VKB. -->
+                            <!-- Historiek van het element. Wordt op deze moment nog niet gebruikt bij export van VKB, wel bij import indien geplande toestanden gesupporteerd moeten worden. -->
                             <xs:element name="historiek" minOccurs="0">
                                 <xs:complexType>
                                     <xs:sequence>
