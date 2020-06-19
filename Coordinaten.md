@@ -13,7 +13,7 @@ In het geval van een rechthoekig bord is dit heel simpel:
       </omschrevenRechthoek>
     </bord>
 ```
-Voor een rechthoekig bord wordt het al ingewikkelder:
+Voor een driehoekig bord wordt het al ingewikkelder:
 ```xml
     <bord>
       <type>A1b</type>
