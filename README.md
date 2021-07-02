@@ -12,11 +12,62 @@ Stuur daarvoor de naam van de organisatie (gemeente/provincie/...) en applicatie
 
 Dan moet er een certificaat aangemaakt en geregistreerd worden. De procedure daarvoor is als volgt:
 
-1. AWV Team Verkeersborden.Vlaanderen definieert een CommonName (CN),
-    het voorstel is: *applicatie*&lowbar;vkb&lowbar;*organisatie*&lowbar;dev&lowbar;client.mow.vlaanderen.be )
-2. De organisatie genereert hiermee een CSR en een private key
-3. De organisatie bezorgt ons die CSR
-4. Wij genereren de public key en bezorgen die terug
+#### DCB
+
+Partners moeten zelf een domein en certificaat aanvragen in: https://dcb.vlaanderen.be/.
+
+Meer info via deze link: https://overheid.vlaanderen.be/publicaties-toegangs-en-gebruikersbeheer#ik-heb-vragen-over-vo-dcb-of-vodcbaas
+
+Hiervoor moet je toegangsrechten krijgen. Laat de IDM lokale beheerder ([Patrick Van Acker](mailto:patrick.vanacker@mow.vlaanderen.be), [Bert Weyne](mailto:bert.weyne@mow.vlaanderen.be), [Tim De Planter](mailto:tim.deplanter@mow.vlaanderen.be) of andere AWV ICA of ICT functiehouders) het VO DCB recht voor je in orde zetten.
+
+#### Naamgeving certificaat (CN)
+Je moet een zinnige naam kiezen om in je certificaat te gebruiken. Dit is meestal een combinatie van de naam van jouw toepassing, de naam van de toepassing waar je toegang tot wil krijgen, de omgeving en het domein van onze toepassing (meestal ‘awv.vlaanderen.be’)
+
+bvb. Om communicatie van de abbamelda applicatie naar de eminfra toepassing te signen in de development omgeving: abbamelda_eminfra_dev.awv.vlaanderen.be
+
+#### Maak je private key en csr aan
+Nu moet je de gekozen CN gebruiken om een private key en csr aan te maken:
+```
+openssl req -nodes -newkey rsa:4096 -keyout abbamelda_eminfra_dev.awv.vlaanderen.be.key -out abbamelda_eminfra_dev.awv.vlaanderen.be.csr -subj "/emailAddress=devops@project.wegenenverkeer.be/C=BE/ST=Brussels/L=Brussels/O=Agentschap Wegen en Verkeer/CN=abbamelda_eminfra_dev.awv.vlaanderen.be"
+```
+Uiteraard gebruik je je eigen mailadres en gegevens voor de naamgeving.
+
+Indien nodig, kan je ook een certificaat met slashes in de CN aanmaken:
+```
+openssl req -nodes -newkey rsa:4096 -keyout awv.vlaanderen.be_omgevingsvergunning-test.key -out awv.vlaanderen.be_omgevingsvergunning-test.csr -subj "/CN=awv.vlaanderen.be/omgevingsvergunning-test,emailAddress=devops@project.wegenenverkeer.be,O=Agentschap Wegen en Verkeer /OU=ICT cel PCO - DevOps team,L=Brussels,ST=Brussels,C=BE"
+```
+
+#### Laad je gemaakte csr op in VO DCB en download certificaat
+1. Laad je gemaakte csr op in VO DCB https://dcb.vlaanderen.be/ en voeg details toe
+
+![DCB details](images/image2021-3-4_10-31-52.png)
+
+2. Download de client certificaten en lever het samen met de key en csr aan je ontwikkelteam op een veilige manier.
+
+![DCB download](images/image2021-3-4_10-33-1.png)
+
+3. Controles:
+Een eerste controle die kan gebeuren is of de files matchen ( csr, key en der file )
+
+```
+openssl req -noout -modulus -in abbamelda_eminfra_dev.awv.vlaanderen.be.csr | openssl md5
+openssl rsa -noout -modulus -in abbamelda_eminfra_dev.awv.vlaanderen.be.key | openssl md5
+openssl x509 -noout -modulus -in abbamelda_eminfra_dev.awv.vlaanderen.be.der -inform der | openssl md5
+```
+Het resultaat van bovenstaande commando's is telkens een cijferreeks, deze moet voor de 3 files dezelfde zijn !!!
+
+bvb:
+```
+(stdin)= a8d230b833ffb1c8a8b8936b0bc19bf0
+(stdin)= a8d230b833ffb1c8a8b8936b0bc19bf0
+(stdin)= a8d230b833ffb1c8a8b8936b0bc19bf0
+```
+4. Verwijder vervolgens de certificaten bij jezelf.
+
+#### Toegangsrechten goed laten zetten
+Bezorg je CN aan [Tim De Planter](mailto:tim.deplanter@mow.vlaanderen.be) en laat hem je toegangsrechten tot de applicatie goed zetten.
+
+Wanneer dat in orde is, zou je toegang moeten hebben tot de applicatie.
 
 Per organisatie hebben we 1 certificaat nodig, dus indien uw applicatie meerdere organisaties beheert, moet u de sync zelf opsplitsen en het juiste certificaat gebruiken.
 
