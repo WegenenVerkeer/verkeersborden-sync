@@ -83,7 +83,9 @@ Buiten de 404 http-status krijg je ook nog een json terug met deze vorm:
 }
 ```
 # Bulk upload rechtstreeks in Verkeersbordendatabank
-In tegenstelling tot de sync is dit een eenmalige actie. Na deze upload wordt het wijzigingen van opstellingen door de gebruiker rechtstreeks in de Verkeersbordendatabank gedaan. Ze zijn dus geen extern beheerder.
+In tegenstelling tot de sync is dit een eenmalige actie. 
+Na deze upload wordt het wijzigingen van opstellingen door de gebruiker rechtstreeks in de Verkeersbordendatabank gedaan. 
+Ze zijn dus geen extern beheerder.
 Van de beheerder wordt verwacht dat hij eerst enkel en alleen zijn opstellingen verwijderd vooraleer hij een bulk upload van de aangeleverde opstellingen oplaad.
 Men kan dit aanzien als een eenmalige aanlevering ikv een opdracht.
 
