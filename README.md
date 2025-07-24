@@ -82,3 +82,24 @@ Buiten de 404 http-status krijg je ook nog een json terug met deze vorm:
     "error": "Er bestaat geen transactie met transactie ID xxxxxxxxxx"
 }
 ```
+# Bulk upload rechtstreeks in Verkeersbordendatabank
+In tegenstelling tot de sync is dit een eenmalige actie. 
+Na deze upload wordt het wijzigingen van opstellingen door de gebruiker rechtstreeks in de Verkeersbordendatabank gedaan. 
+Ze zijn dus geen extern beheerder.
+
+Van de beheerder wordt verwacht dat hij eerst enkel en alleen zijn opstellingen verwijderd vooraleer hij een bulk upload van de aangeleverde opstellingen oplaad.
+Men kan dit aanzien als een eenmalige aanlevering ikv een opdracht.
+
+### Eigenschappen van het aan te leveren zip bestand.
+Het zip bestand moet voldoen aan de voorbeeldenbestand(en) die op deze Github pagina beschikbaar zijn.
+
+In dit zip-bestand zitten buiten het export.xml bestand ook mogelijke foto's en SVG-bestanden van de opstellingen die beschreven zijn in het XML-bestand.
+Het export.xml bestand moet voldoen aan het schema bestand (Export-awv.xsd).
+
+Een zip bestand mag nooit groter zijn dan 100Mb.
+
+Indien dit wel het geval is moet het zip bestand opgesplitst worden in meerdere aparte zip-bestanden.
+Per afzonderlijk zip bestand moet het export.xml bestand ook opgesplist zijn en mogen enkel bijhorende foto's en SVG's aanwezig waarnaar het opgeplitste export.xml bestand naar verwijst.
+
+
+
