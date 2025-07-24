@@ -97,6 +97,7 @@ In dit zip-bestand zitten buiten het export.xml bestand ook mogelijke foto's en 
 Het export.xml bestand moet voldoen aan het schema bestand (Export-awv.xsd).
 
 Een zip bestand mag nooit groter zijn dan 100Mb.
+Probeer de fotobestanden te verkleinen tot max. 400x400 pixels om de grootte van het zip bestand te beperken.
 
 Indien dit wel het geval is moet het zip bestand opgesplitst worden in meerdere aparte zip-bestanden.
 Per afzonderlijk zip bestand moet het export.xml bestand ook opgesplist zijn en mogen enkel bijhorende foto's en SVG's aanwezig waarnaar het opgeplitste export.xml bestand naar verwijst.
