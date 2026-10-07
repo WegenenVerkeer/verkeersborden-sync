@@ -16,7 +16,7 @@ Een concreet voorbeeld: een C21 bord (tonnagebeperking) moet 1 parameter _"Tonna
 
 Dit geldt ook voor wegmarkeringen: bv. een onderbroken lijn (WM72.3), heeft 2 parameters: _"Breedte"_ met bv. waarde _"0,15 m"_ en _"Type_onderbroken_streep"_ met waarde _"Standaard"_.
 
-#### Linken naar het register:
+#### Linken naar het register: https://register.mobiliteit.vlaanderen.be/ldes-mow-register/1
 
 _**TODO**_
 
